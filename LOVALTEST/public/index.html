@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lokaler Namen-Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        input, button {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        button:disabled {
+            background-color: gray;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <h1>Lokaler Namen-Generator</h1>
+    <p>Gib deinen Namen ein, um einen zufälligen Namen zu erhalten:</p>
+    <input type="text" id="userName" placeholder="Dein Name">
+    <button id="rollButton" onclick="getName()">Namen erhalten</button>
+    <p id="result"></p>
+    <script>
+        async function getName() {
+            const userName = document.getElementById('userName').value;
+            const button = document.getElementById('rollButton');
+
+            if (!userName) {
+                document.getElementById('result').innerText = 'Bitte gib deinen Namen ein!';
+                return;
+            }
+
+            // Button deaktivieren
+            button.disabled = true;
+
+            const response = await fetch('http://localhost:3000/get-name', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userName })
+            });
+
+            const data = await response.json();
+            if (data.error) {
+                document.getElementById('result').innerText = data.error;
+                button.disabled = false; // Button wieder aktivieren bei Fehler
+            } else {
+                document.getElementById('result').innerText = data.message || 
+                    `Hallo ${data.userName}, dein zufälliger Name ist: ${data.assignedName}`;
+            }
+        }
+    </script>
+</body>
+</html>

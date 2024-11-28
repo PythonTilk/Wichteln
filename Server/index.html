@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wichtel Zufallsgenerator</title>
+    <style>
+        body {
+            background-image: url(https://r2.e-z.host/053635b6-4624-4d66-8dee-748541350bdd/6hfv8a7n.jpeg);
+        }
+        :root {
+            --accent-color: #3498db;
+            --highlight-color: #2980b9;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        h1 {
+            color: var(--accent-color);
+        }
+
+        input {
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid var(--accent-color);
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: var(--accent-color);
+            color: white;
+            cursor: pointer;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: var(--highlight-color);
+        }
+
+        #result {
+            font-size: 1.2rem;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        footer {
+            position: absolute;
+            bottom: 10px;
+            font-size: 0.9rem;
+            color: var(--accent-color);
+            text-align: center;
+            width: 100%;
+        }
+
+        .animated-heart {
+            display: inline-block;
+            animation: sparkle 1s infinite;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.5); }
+        }
+
+        .top-left {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+
+        .top-right {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 100px;
+            mix-blend-mode: multiply;
+        }
+    </style>
+</head>
+<body>
+    <img src="https://media.giphy.com/media/sIIhZliB2McAo/giphy.gif" alt="Nyan Cat" class="top-left" width="100">
+    <img src="https://tenor.com/de/view/merry-christmas-santa-claus-wave-gif-13136819.gif" alt="Santa Claus" class="top-right" width="100">
+    <h1>Wichtel Zufallsgenerator</h1>
+    <p>Gib deinen Namen ein, um einen zufälligen Namen zu erhalten:</p>
+    <input type="text" id="userName" placeholder="Dein Name">
+    <button id="rollButton" onclick="getName()">Namen erhalten</button>
+    <p id="result"></p>
+    <footer>
+        <div>Made with <span class="animated-heart">❤️</span> by pythontilk</div>
+        <br>
+        <a href="https://tilk.tech" target="_blank">Look at my other projects here</a>
+    </footer>
+    <script>
+        async function getName() {
+            const userName = document.getElementById('userName').value;
+            const rollButton = document.getElementById('rollButton');
+
+            if (!userName) {
+                document.getElementById('result').innerText = 'Bitte gib deinen Namen ein!';
+                return;
+            }
+
+            rollButton.disabled = true;
+
+            // Simulate fetching a random name from the server
+            const response = await fetch('/get-random-name', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ userName })
+            });
+
+            const data = await response.json();
+            document.getElementById('result').innerText = `Dein zufälliger Name ist: ${data.randomName}`;
+            rollButton.disabled = false;
+        }
+    </script>
+</body>
+</html>
