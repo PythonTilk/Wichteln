@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -23,7 +25,6 @@
             margin: 0;
             background-color: #f0f0f0;
             text-align: center;
-            
         }
 
         h1 {
@@ -104,7 +105,10 @@
         <a href="https://tilk.tech" target="_blank">Look at my other projects here</a>
     </footer>
     <script>
-        async function getName() {
+        const names = ["Anna", "Ben", "Clara", "David", "Eva", "Felix", "Greta", "Hanna"];
+        const assignedNames = {};
+
+        function getName() {
             const userName = document.getElementById('userName').value;
             const rollButton = document.getElementById('rollButton');
 
@@ -113,21 +117,23 @@
                 return;
             }
 
-            rollButton.disabled = true;
+            if (assignedNames[userName]) {
+                document.getElementById('result').innerText = `Hallo ${userName}, du hast bereits den Namen: ${assignedNames[userName]}`;
+                return;
+            }
 
-            // Simulate fetching a random name from the server
-            const response = await fetch('/get-random-name', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ userName })
-            });
+            if (names.length === 0) {
+                document.getElementById('result').innerText = 'Alle Namen wurden bereits vergeben!';
+                return;
+            }
 
-            const data = await response.json();
-            document.getElementById('result').innerText = `Dein zufälliger Name ist: ${data.randomName}`;
-            rollButton.disabled = false;
+            const randomIndex = Math.floor(Math.random() * names.length);
+            const assignedName = names.splice(randomIndex, 1)[0];
+            assignedNames[userName] = assignedName;
+
+            document.getElementById('result').innerText = `Dein zufälliger Name ist: ${assignedName}`;
         }
     </script>
 </body>
 </html>
+
